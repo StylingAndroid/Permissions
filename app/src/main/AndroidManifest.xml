@@ -15,7 +15,13 @@
     android:theme="@style/AppTheme.NoActionBar"
     tools:ignore="GoogleAppIndexingWarning">
 
-    <activity android:name=".MainActivity">
+
+    <activity android:name=".MainActivity" />
+
+    <activity
+      android:name=".PermissionsActivity"
+      android:label="@string/app_name"
+      android:theme="@style/AppTheme.Permissions">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
