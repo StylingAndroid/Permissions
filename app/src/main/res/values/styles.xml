@@ -15,7 +15,7 @@
   </style>
 
   <style name="AppTheme.Permissions">
-    <item name="android:background">@color/colorPrimary</item>
+    <item name="android:windowBackground">@color/colorPrimary</item>
   </style>
 
   <style name="AppTheme.AppBarOverlay"
