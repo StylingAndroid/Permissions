@@ -9,7 +9,7 @@ import android.support.v7.widget.Toolbar;
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 0;
-    static final String[] PERMISSIONS = new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS};
+    private static final String[] PERMISSIONS = new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS};
     private PermissionsChecker checker;
 
     @Override
