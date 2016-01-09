@@ -7,15 +7,16 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
 public class PermissionsActivity extends AppCompatActivity {
+    public static final int PERMISSIONS_GRANTED = 0;
+    public static final int PERMISSIONS_DENIED = 1;
+
     private static final String EXTRA_PERMISSIONS = "com.stylingandroid.permissions.EXTRA_PERMISSIONS";
-    private static final String EXTRA_FINISH = "com.stylingandroid.permissions.EXTRA_FINISH";
     private PermissionsChecker checker;
 
-    public static void startActivity(Activity activity, String... permissions) {
+    public static void startActivityForResult(Activity activity, int requestCode, String... permissions) {
         Intent intent = new Intent(activity, PermissionsActivity.class);
         intent.putExtra(EXTRA_PERMISSIONS, permissions);
-        intent.putExtra(EXTRA_FINISH, true);
-        ActivityCompat.startActivity(activity, intent, null);
+        ActivityCompat.startActivityForResult(activity, intent, requestCode, null);
     }
 
     @Override
@@ -34,30 +35,17 @@ public class PermissionsActivity extends AppCompatActivity {
         if (checker.lacksPermissions(permissions)) {
             requestPermissions(permissions);
         } else {
-            if (shouldFinish()) {
-                finish();
-            } else {
-                startMainActivity();
-            }
+            allPermissionsGranted();
         }
     }
 
     private String[] getPermissions() {
-        String[] permissions = getIntent().getStringArrayExtra(EXTRA_PERMISSIONS);
-        if (permissions == null) {
-            permissions = MainActivity.PERMISSIONS;
-        }
-        return permissions;
+        return getIntent().getStringArrayExtra(EXTRA_PERMISSIONS);
     }
 
-    private boolean shouldFinish() {
-        Intent intent = getIntent();
-        return intent.getBooleanExtra(EXTRA_FINISH, false);
-    }
-
-    private void startMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
-        ActivityCompat.startActivity(this, intent, null);
+    private void allPermissionsGranted() {
+        setResult(PERMISSIONS_GRANTED);
+        finish();
     }
 
     private void requestPermissions(String... permissions) {
