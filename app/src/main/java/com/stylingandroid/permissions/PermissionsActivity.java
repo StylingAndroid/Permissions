@@ -12,19 +12,20 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 public class PermissionsActivity extends AppCompatActivity {
+    public static final int PERMISSIONS_GRANTED = 0;
+    public static final int PERMISSIONS_DENIED = 1;
+
     private static final int PERMISSION_REQUEST_CODE = 0;
     private static final String EXTRA_PERMISSIONS = "com.stylingandroid.permissions.EXTRA_PERMISSIONS";
-    private static final String EXTRA_FINISH = "com.stylingandroid.permissions.EXTRA_FINISH";
     private static final String PACKAGE_URL_SCHEME = "package:";
 
     private PermissionsChecker checker;
     private boolean requiresCheck;
 
-    public static void startActivity(Activity activity, String... permissions) {
+    public static void startActivityForResult(Activity activity, int requestCode, String... permissions) {
         Intent intent = new Intent(activity, PermissionsActivity.class);
         intent.putExtra(EXTRA_PERMISSIONS, permissions);
-        intent.putExtra(EXTRA_FINISH, true);
-        ActivityCompat.startActivity(activity, intent, null);
+        ActivityCompat.startActivityForResult(activity, intent, requestCode, null);
     }
 
     @Override
@@ -53,11 +54,7 @@ public class PermissionsActivity extends AppCompatActivity {
     }
 
     private String[] getPermissions() {
-        String[] permissions = getIntent().getStringArrayExtra(EXTRA_PERMISSIONS);
-        if (permissions == null) {
-            permissions = MainActivity.PERMISSIONS;
-        }
-        return permissions;
+        return getIntent().getStringArrayExtra(EXTRA_PERMISSIONS);
     }
 
     private void requestPermissions(String... permissions) {
@@ -65,21 +62,8 @@ public class PermissionsActivity extends AppCompatActivity {
     }
 
     private void allPermissionsGranted() {
-        if (shouldFinish()) {
-            finish();
-        } else {
-            startMainActivity();
-        }
-    }
-
-    private boolean shouldFinish() {
-        Intent intent = getIntent();
-        return intent.getBooleanExtra(EXTRA_FINISH, false);
-    }
-
-    private void startMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
-        ActivityCompat.startActivity(this, intent, null);
+        setResult(PERMISSIONS_GRANTED);
+        finish();
     }
 
     @Override
@@ -109,6 +93,7 @@ public class PermissionsActivity extends AppCompatActivity {
         dialogBuilder.setNegativeButton(R.string.quit, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                setResult(PERMISSIONS_DENIED);
                 finish();
             }
         });
