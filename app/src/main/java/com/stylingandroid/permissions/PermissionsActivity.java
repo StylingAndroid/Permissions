@@ -31,6 +31,9 @@ public class PermissionsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getIntent() == null || !getIntent().hasExtra(EXTRA_PERMISSIONS)) {
+            throw new RuntimeException("This Activity needs to be launched using the static startActivityForResult() method.");
+        }
         setContentView(R.layout.activity_permissions);
 
         checker = new PermissionsChecker(this);
